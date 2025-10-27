@@ -1,0 +1,81 @@
+services:
+  bridge-db:
+    image: postgres:15
+    container_name: bridgelearn-db
+    environment:
+      POSTGRES_USER: bridgeuser
+      POSTGRES_PASSWORD: bridgepass
+      POSTGRES_DB: bridgelearn
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - bridgelearn-net
+
+  backend:
+    build: ./backend
+    container_name: bridgelearn-backend
+    environment:
+      DB_HOST: bridge-db
+      DB_USER: bridgeuser
+      DB_PASS: bridgepass
+      DB_NAME: bridgelearn
+      MOODLE_URL: http://moodle-app:8080
+      NODE_ENV: development
+    ports:
+      - "5000:5000"
+    depends_on:
+      - bridge-db
+    networks:
+      - bridgelearn-net
+
+  moodle-app:
+    image: moodlehq/moodle-php-apache:8.4
+    container_name: bridgelearn-moodle
+    environment:
+      MOODLE_DBHOST: bridge-db
+      MOODLE_DBNAME: bridgelearn
+      MOODLE_DBUSER: bridgeuser
+      MOODLE_DBPASS: bridgepass
+    ports:
+      - "8080:80"
+    depends_on:
+      - bridge-db
+    networks:
+      - bridgelearn-net
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: bridgelearn-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: abumere.ejakhegbe@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: P@ssword12345!
+    ports:
+      - "5050:80"
+    depends_on:
+      - bridge-db
+    networks:
+      - bridgelearn-net
+
+  frontend:
+    build: ./frontend
+    container_name: bridgelearn-frontend
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_API_URL=http://backend:5000
+      - REACT_APP_MOODLE_URL=http://moodle-app:8080
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+    networks:
+      - bridgelearn-net
+
+networks:
+  bridgelearn-net:
+
+volumes:
+  db_data:
