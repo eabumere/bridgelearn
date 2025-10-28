@@ -41,6 +41,7 @@ moodle/app/config.php
 moodle/app/moodledata/
 moodle/app/*/cache/
 moodle/app/*.log
+moodle/app/
  
 # Logs and runtime files
 logs/
