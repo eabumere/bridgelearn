@@ -1,0 +1,27 @@
+Quick steps to see your changes
+
+sudo usermod -aG docker aejakhegbe
+sudo systemctl restart docker
+
+
+
+
+Option 1: 
+Rebuild and restart (recommended)
+sudo docker compose up -d --build frontend
+
+This rebuilds the container (installs new dependencies) and restarts it.
+
+Option 2: Step by step
+sudo docker compose up -d frontend
+
+
+Visit http://localhost:3000
+
+Monitor logs
+sudo docker compose logs -f frontend
+
+
+sudo docker exec -it bridgelearn-frontend sh -c "rm -rf node_modules/.vite"
+sudo docker compose restart frontend
+

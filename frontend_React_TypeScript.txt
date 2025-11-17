@@ -1,0 +1,143 @@
+🎓 Frontend Module Specification – iTutor-Like Platform (Vite + React + TypeScript + WebRTC + Redux Toolkit)
+🧱 Project Context
+
+This is a Vite-based React (TypeScript) frontend for an interactive online tutoring platform similar to iTutor.
+It enables real-time teaching sessions with video conferencing (WebRTC), whiteboard collaboration, stickers and rewards, and live chat between teachers, students, and tech support.
+
+🗂 Confirmed Directory Structure
+frontend/
+├── src/
+│   ├── components/
+│   │   ├── LiveClassroom/
+│   │   │   ├── VideoContainer.tsx
+│   │   │   ├── Reactions.tsx
+│   │   │   ├── Whiteboard.tsx
+│   │   │   ├── ChatPanel.tsx
+│   │   │   └── SupportButton.tsx
+│   │   ├── Dashboard/
+│   │   │   ├── StudentDashboard.tsx
+│   │   │   ├── TutorDashboard.tsx
+│   │   │   └── ParentPortal.tsx
+│   ├── pages/
+│   ├── store/                         # Redux Toolkit store & slices
+│   │   ├── index.ts
+│   │   ├── userSlice.ts
+│   │   ├── classroomSlice.ts
+│   │   ├── chatSlice.ts
+│   │   ├── reactionSlice.ts
+│   │   └── uiSlice.ts
+│   ├── utils/
+│   │   ├── auth.ts
+│   │   ├── apiClient.ts
+│   │   └── s3Uploader.ts
+│   ├── api/
+│   │   ├── classroom.ts
+│   │   ├── progress.ts
+│   │   └── moodle.ts
+│   ├── assets/
+│   └── config/
+│       └── env.ts
+├── App.tsx
+
+🧩 LiveClassroom Components
+1. VideoContainer.tsx
+
+WebRTC-based video grid for teachers and students.
+
+Handles:
+
+Media stream setup via RTK actions (startSession, toggleCamera, toggleMic)
+
+Screen sharing toggle
+
+Video quality switch (Low / Medium / High / HD)
+
+Displays logo and background customization (blur, solid color, uploaded image).
+
+2. Whiteboard.tsx
+
+Collaborative canvas with drawing, writing, and annotations.
+
+Tools: pen, eraser, color, text, shapes, undo/redo.
+
+Real-time sync via WebRTC data channels or Socket.IO.
+
+Whiteboard actions (e.g., draw, clear, save) managed through Redux to ensure deterministic state updates.
+
+3. Reactions.tsx
+
+Panel for stickers, applause, and rewards:
+
+Stickers: “👏”, “👍”, “🔥”, “Great Job!”
+
+Rewards: Increment points or badges via reactionSlice actions.
+
+Animated claps using Framer Motion.
+
+Redux ensures all connected clients receive synchronized reactions.
+
+4. ChatPanel.tsx
+
+Two-tab chat interface:
+
+Class Chat: Real-time teacher ↔ student communication.
+
+Tech Support: For support conversations.
+
+Backed by Socket.IO and Redux chatSlice.
+
+Includes role badges, timestamps, and persistence via /api/classroom.ts.
+
+5. SupportButton.tsx
+
+Floating button that opens tech support chat modal.
+
+Uses RTK actions like openSupportModal() and sendSupportMessage().
+
+🧮 Redux Toolkit Store Structure
+Slice	Purpose	Key Actions
+userSlice	Authenticated user data (via AWS Cognito)	setUser, logout, updateProfile
+classroomSlice	Live session, media state, participants	startSession, endSession, toggleCamera, setVideoQuality
+chatSlice	Handles messages and support chat	sendMessage, receiveMessage, loadChatHistory
+reactionSlice	Stickers, claps, and reward points	sendReaction, addReward, clearReactions
+uiSlice	UI modals, theme mode, background settings	toggleDarkMode, setBackground, openModal
+
+✅ Use createAsyncThunk for async actions (e.g., message sending, file upload).
+✅ Configure the store in store/index.ts with configureStore() and Provider wrapping App.tsx.
+
+⚙️ Utilities & APIs
+
+auth.ts → AWS Cognito integration (sign-in, sign-up, token refresh).
+
+apiClient.ts → Axios instance with interceptors (JWT + 401 handling).
+
+s3Uploader.ts → Uploads lesson resources to AWS S3.
+
+env.ts → Contains WebRTC STUN/TURN configuration, API URLs, and S3 credentials.
+
+🎨 Tech Stack
+
+Framework: React + Vite + TypeScript
+
+State Management: Redux Toolkit + Redux Thunk
+
+UI Library: Tailwind CSS + ShadCN/UI
+
+Animations: Framer Motion
+
+Real-time: WebRTC + Socket.IO
+
+Auth: AWS Cognito
+
+File Storage: AWS S3
+
+✨ Design & UX Vibe
+
+Clean, modern, and educational.
+
+Balanced between a classroom and game-like environment (interactive but professional).
+
+Use rounded corners, subtle shadows, animated feedback, and clear typography.
+
+
+

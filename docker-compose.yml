@@ -63,8 +63,13 @@ services:
     container_name: bridgelearn-frontend
     environment:
       - NODE_ENV=development
-      - REACT_APP_API_URL=http://backend:5000
-      - REACT_APP_MOODLE_URL=http://moodle-app:8080
+      - VITE_API_URL=http://localhost:5000
+      - VITE_SOCKET_URL=http://localhost:5000
+      - VITE_MOODLE_URL=http://localhost:8080
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/dist
     ports:
       - "3000:3000"
     stdin_open: true
