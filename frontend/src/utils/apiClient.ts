@@ -9,16 +9,30 @@ const apiClient: AxiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
-// Request interceptor to add JWT token
+// Request interceptor to add JWT token and ensure /api prefix
 apiClient.interceptors.request.use(
-  (config) => {
+  (requestConfig) => {
     const token = localStorage.getItem('authToken');
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (token && requestConfig.headers) {
+      requestConfig.headers.Authorization = `Bearer ${token}`;
     }
-    return config;
+
+    const url = requestConfig.url || '';
+    const needsApiPrefix =
+      url &&
+      !url.startsWith('http') &&
+      !url.startsWith('/api');
+
+    if (needsApiPrefix) {
+      requestConfig.url = url.startsWith('/')
+        ? `/api${url}`
+        : `/api/${url}`;
+    }
+
+    return requestConfig;
   },
   (error) => {
     return Promise.reject(error);

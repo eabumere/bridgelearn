@@ -1,13 +1,11 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Pen, Eraser, Type, Circle, Square, Undo, Redo, Trash2 } from 'lucide-react';
+import { Pen, Eraser, Type, Circle, Square, Trash2 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { io, Socket } from 'socket.io-client';
 import { config } from '../../config/env';
 
 type Tool = 'pen' | 'eraser' | 'text' | 'circle' | 'square';
-type DrawingMode = 'draw' | 'erase' | 'text' | 'shape';
-
 export default function Whiteboard() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -123,8 +121,8 @@ export default function Whiteboard() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const prevX = ctx.lineTo ? (ctx as any).lastX || x : x;
-    const prevY = ctx.lineTo ? (ctx as any).lastY || y : y;
+    const prevX = (ctx as any).lastX ?? x;
+    const prevY = (ctx as any).lastY ?? y;
 
     ctx.lineTo(x, y);
     ctx.stroke();

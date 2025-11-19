@@ -9,7 +9,7 @@ export interface UploadOptions {
 export const s3Uploader = {
   // Upload file to S3
   uploadFile: async (
-    file: File,
+    _file: File,
     path: string,
     options?: UploadOptions
   ): Promise<string> => {
@@ -39,7 +39,7 @@ export const s3Uploader = {
     basePath: string,
     options?: UploadOptions
   ): Promise<string[]> => {
-    const uploadPromises = files.map((file, index) =>
+    const uploadPromises = files.map((file, _index) =>
       s3Uploader.uploadFile(file, `${basePath}/${file.name}`, options)
     );
     return Promise.all(uploadPromises);

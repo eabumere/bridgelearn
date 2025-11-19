@@ -66,7 +66,7 @@ export const auth = {
   },
 
   // Sign up new user
-  signUp: async (email: string, password: string, name: string, role: User['role']): Promise<User> => {
+  signUp: async (email: string, _password: string, name: string, role: User['role']): Promise<User> => {
     // TODO: Implement AWS Cognito sign-up
     const mockUser: User = {
       id: Date.now().toString(),

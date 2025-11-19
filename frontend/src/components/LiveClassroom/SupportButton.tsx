@@ -2,7 +2,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { openSupportModal, closeSupportModal } from '../../store/chatSlice';
 import { HeadphonesIcon, X } from 'lucide-react';
-import { cn } from '../../utils/cn';
 import ChatPanel from './ChatPanel';
 
 export default function SupportButton() {

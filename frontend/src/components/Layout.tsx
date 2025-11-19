@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { toggleSidebar, toggleDarkMode } from '../store/uiSlice';
 import { logout } from '../store/userSlice';

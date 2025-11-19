@@ -10,6 +10,7 @@ const StudentDashboard = lazy(() => import('./components/Dashboard/StudentDashbo
 const TutorDashboard = lazy(() => import('./components/Dashboard/TutorDashboard'));
 const ParentPortal = lazy(() => import('./components/Dashboard/ParentPortal'));
 const AdminDashboard = lazy(() => import('./components/Dashboard/AdminDashboard'));
+const UserManagement = lazy(() => import('./components/Admin/UserManagement'));
 const ClassroomPage = lazy(() => import('./components/LiveClassroom/ClassroomPage'));
 
 // Loading component
@@ -108,6 +109,20 @@ function App() {
               <Layout>
                 <Suspense fallback={<LoadingSpinner />}>
                   <ParentPortal />
+                </Suspense>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin Routes */}
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Suspense fallback={<LoadingSpinner />}>
+                  <UserManagement />
                 </Suspense>
               </Layout>
             </ProtectedRoute>

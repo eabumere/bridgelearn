@@ -7,7 +7,6 @@ import {
   toggleScreenShare,
   setVideoQuality,
   setLocalStream,
-  addParticipant,
 } from '../../store/classroomSlice';
 import { config } from '../../config/env';
 import type { VideoQuality } from '../../store/classroomSlice';

@@ -21,7 +21,8 @@ services:
       DB_USER: bridgeuser
       DB_PASS: bridgepass
       DB_NAME: bridgelearn
-      MOODLE_URL: http://moodle-app:8080
+      MOODLE_URL: http://moodle-app:80
+      MOODLE_TOKEN: your_token_here
       NODE_ENV: development
     ports:
       - "5000:5000"
@@ -31,19 +32,34 @@ services:
       - bridgelearn-net
 
   moodle-app:
-    image: moodlehq/moodle-php-apache:8.4
+    image: moodlehq/moodle-php-apache:8.3
     container_name: bridgelearn-moodle
     environment:
       MOODLE_DBHOST: bridge-db
       MOODLE_DBNAME: bridgelearn
       MOODLE_DBUSER: bridgeuser
       MOODLE_DBPASS: bridgepass
+      # Moodle version to download (latest, 4.4, 4.3, etc.)
+      MOODLE_VERSION: latest
+      # User/group IDs for proper permissions (www-data: www-data)
+      MOODLE_USER_ID: 33
+      MOODLE_GROUP_ID: 33
+      # PHP configuration (PHP 8.3 compatible with Moodle 4.4)
+      PHP_INI_ERROR_REPORTING: "E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_WARNING & ~E_NOTICE & ~E_USER_WARNING & ~E_USER_NOTICE & ~E_USER_DEPRECATED"
+    volumes:
+      - moodle_data:/var/www/moodledata
+      - moodle_code:/var/www/html
+      - ./moodle/init-moodle.sh:/docker-entrypoint.d/99-init-moodle.sh:ro
+      - ./moodle/entrypoint-wrapper.sh:/usr/local/bin/entrypoint-wrapper.sh:ro
+      - ./moodle/php-config.ini:/usr/local/etc/php/conf.d/99-moodle.ini:ro
+      # .htaccess will be created by entrypoint-wrapper.sh
     ports:
       - "8080:80"
     depends_on:
       - bridge-db
     networks:
       - bridgelearn-net
+    entrypoint: ["/bin/bash", "/usr/local/bin/entrypoint-wrapper.sh"]
 
   pgadmin:
     image: dpage/pgadmin4
@@ -84,3 +100,5 @@ networks:
 
 volumes:
   db_data:
+  moodle_data:
+  moodle_code:

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAppSelector } from '../../store/hooks';
 import { Users, BookOpen, Clock, TrendingUp, MessageSquare } from 'lucide-react';
